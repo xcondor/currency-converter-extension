@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "实时汇率转换器",
+  "version": "1.0.0",
+  "description": "自动识别网页中的货币金额并转换为本地货币",
+  "permissions": [
+    "storage",
+    "notifications",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "https://v6.exchangerate-api.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "side_panel": {
+    "default_path": "popup.html"
+  },
+  "action": {
+    "default_title": "打开汇率转换器设置",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

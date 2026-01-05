@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad48" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="48" height="48" rx="10.56" fill="url(#grad48)"/>
+  
+  <!-- 白色圆形背景 -->
+  <circle cx="24" cy="24" r="16.799999999999997" fill="white" opacity="0.95"/>
+  
+  <!-- 货币符号 -->
+  <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#667eea" text-anchor="middle" dominant-baseline="central">¥</text>
+</svg>

@@ -1,0 +1,65 @@
+✅ .crx 文件支持已添加！
+
+📦 已完成的工作：
+
+1. 更新了 .gitignore
+   - 添加了 currency-converter.crx 到忽略列表
+   - .crx 文件应该通过 GitHub Releases 发布
+
+2. 更新了 README.md
+   - 添加了"从 GitHub Releases 下载"安装方法
+   - 中英文双语说明
+   - 推荐使用 .crx 文件安装
+
+3. 更新了 INSTALLATION.md
+   - 完整的 .crx 安装步骤
+   - 两种安装方法对比
+   - 常见问题解答
+
+4. 更新了 GITHUB_RELEASE_GUIDE.md
+   - 添加了上传 .crx 文件的说明
+   - Release 描述模板包含安装方法
+
+5. 创建了 HOW_TO_PACKAGE.md
+   - 详细的打包教程
+   - 私钥管理指南
+   - 自动化打包方案
+   - 安全最佳实践
+
+6. 更新了 CHECKLIST.md
+   - 添加了 .crx 文件检查项
+
+📝 发布 .crx 文件的步骤：
+
+1. 构建项目
+   npm run build
+
+2. 在 Chrome 中打包
+   - 访问 chrome://extensions/
+   - 点击"打包扩展程序"
+   - 选择 dist 目录
+   - 生成 .crx 和 .pem 文件
+
+3. 重命名文件
+   mv dist.crx currency-converter.crx
+   mv dist.pem currency-converter.pem
+
+4. 保存私钥（重要！）
+   - 将 .pem 文件保存到安全位置
+   - 不要提交到 Git
+
+5. 创建 GitHub Release
+   - 上传 currency-converter.crx
+   - 用户可以直接下载安装
+
+⚠️ 重要提示：
+- .pem 私钥文件必须妥善保管
+- 更新扩展时需要使用相同的私钥
+- 不要将私钥提交到 Git 仓库
+
+📖 详细文档：
+- 安装方法：INSTALLATION.md
+- 打包教程：HOW_TO_PACKAGE.md
+- 发布指南：GITHUB_RELEASE_GUIDE.md
+
+现在你的项目已经完全支持 .crx 文件分发了！🎉

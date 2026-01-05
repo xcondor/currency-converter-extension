@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>汇率转换器</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="sidebar">
+    <!-- 头部 -->
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">💱</span>
+          <h1 class="logo-text" data-i18n="appName">汇率转换器</h1>
+        </div>
+        <p class="subtitle" data-i18n="appSubtitle">实时货币转换助手</p>
+      </div>
+      <!-- 语言切换按钮 -->
+      <div class="language-switcher">
+        <button id="langBtn" class="lang-btn" title="Switch Language / 切换语言">
+          <span id="langText">中文</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="content">
+      <!-- 启用开关卡片 -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title" data-i18n="controlTitle">功能控制</h2>
+        </div>
+        <div class="card-body">
+          <div class="toggle-container">
+            <div class="toggle-info">
+              <span class="toggle-label" data-i18n="autoConvertLabel">自动转换</span>
+              <span class="toggle-desc" data-i18n="autoConvertDesc">开启后自动识别并转换页面货币</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="enabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 设置卡片 -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title" data-i18n="settingsTitle">转换设置</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label" data-i18n="baseCurrencyLabel">本地货币</label>
+            <select id="baseCurrency" class="form-select">
+              <option value="CNY" data-i18n="currencyCNY">🇨🇳 人民币 (CNY)</option>
+              <option value="USD" data-i18n="currencyUSD">🇺🇸 美元 (USD)</option>
+              <option value="EUR" data-i18n="currencyEUR">🇪🇺 欧元 (EUR)</option>
+              <option value="GBP" data-i18n="currencyGBP">🇬🇧 英镑 (GBP)</option>
+              <option value="JPY" data-i18n="currencyJPY">🇯🇵 日元 (JPY)</option>
+              <option value="KRW" data-i18n="currencyKRW">🇰🇷 韩元 (KRW)</option>
+              <option value="HKD" data-i18n="currencyHKD">🇭🇰 港币 (HKD)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" data-i18n="decimalPlacesLabel">小数位数</label>
+            <input type="number" id="decimalPlaces" min="2" max="4" value="2" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="showExchangeRate" class="checkbox">
+              <span class="checkbox-text" data-i18n="showRateLabel">悬停时显示汇率信息</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态卡片 -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title" data-i18n="statusTitle">汇率状态</h2>
+        </div>
+        <div class="card-body">
+          <div class="status-container">
+            <div class="status-icon">📊</div>
+            <div class="status-info">
+              <div id="statusText" class="status-text" data-i18n="statusLoading">加载中...</div>
+              <div class="status-desc" data-i18n="statusDesc">汇率数据每小时更新</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="actions">
+        <button id="clearCache" class="btn btn-secondary">
+          <span class="btn-icon">🗑️</span>
+          <span data-i18n="clearCacheBtn">清除缓存</span>
+        </button>
+      </div>
+
+      <!-- 消息提示 -->
+      <div id="message" class="message hidden"></div>
+    </div>
+
+    <!-- 底部信息 -->
+    <div class="footer">
+      <p class="footer-text" data-i18n="footerText">数据由 ExchangeRate-API 提供</p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
