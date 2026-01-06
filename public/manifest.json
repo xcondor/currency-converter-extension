@@ -5,7 +5,6 @@
   "description": "自动识别网页中的货币金额并转换为本地货币",
   "permissions": [
     "storage",
-    "notifications",
     "sidePanel"
   ],
   "host_permissions": [
