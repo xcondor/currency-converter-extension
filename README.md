@@ -327,6 +327,50 @@ Uses [ExchangeRate-API](https://www.exchangerate-api.com/) for real-time exchang
 - [UI Design](UI_DESIGN.md)
 - [Language Support](LANGUAGE_SUPPORT.md)
 
+### 🔒 Privacy Policy
+
+**We take your privacy seriously. This extension:**
+
+✅ **Does NOT collect any personal data**
+- No browsing history
+- No personal information
+- No tracking or analytics
+
+✅ **Processes everything locally**
+- Currency detection happens on your device
+- Conversion calculations done locally
+- Settings stored in Chrome's local storage only
+
+✅ **Only external request**
+- Fetches exchange rates from ExchangeRate-API
+- Only sends currency code (e.g., "CNY")
+- No user data or webpage content sent
+
+✅ **Open source and auditable**
+- All code is public on GitHub
+- Security researchers can verify our claims
+- Community-reviewed for transparency
+
+**Why we need `<all_urls>` permission:**
+- To detect currency amounts on any website you visit
+- Similar to Google Translate, Grammarly, and other universal tools
+- Cannot predict which websites you'll need currency conversion on
+- Must work automatically without manual triggering each time
+
+**Data we store locally:**
+- Your currency preferences (e.g., CNY, USD)
+- Display settings (decimal places, show rate)
+- Cached exchange rates (public data, 1-hour validity)
+
+**Data we NEVER access:**
+- Passwords or login credentials
+- Form data or input fields
+- Cookies or session data
+- Payment information
+- Private messages or emails
+
+For questions about privacy, please open an issue on GitHub.
+
 ### 🤝 Contributing
 
 Contributions are welcome! Please follow these steps:

@@ -70,45 +70,51 @@ The sidebar provides better UX than traditional popup, allowing users to adjust 
 
 ### 3️⃣ 需请求主机权限的理由
 
-**中文版本：**
+**中文版本（推荐 - 更详细）：**
 ```
-本扩展需要两类主机权限：
+本扩展是通用货币转换工具，必须使用 <all_urls> 权限才能实现核心功能。
 
-【权限 1】https://v6.exchangerate-api.com/*
-• 用途：从 ExchangeRate-API 获取实时汇率数据
-• 说明：这是唯一的外部 API 请求，用于获取 160+ 种货币的最新汇率信息
-• 频率：每小时最多请求一次（使用本地缓存机制）
-• 数据：仅请求公开的汇率数据，不发送任何用户信息
+【为什么需要 <all_urls>】
+本扩展需要在用户访问的任何网站上自动检测和转换货币金额。使用场景包括：电商购物（Amazon、eBay、淘宝等）、新闻阅读（BBC、CNN等）、社交媒体、企业官网等数百万个网站。由于无法预先列出所有可能包含货币信息的网站，必须使用 <all_urls> 权限。
 
-【权限 2】<all_urls> (content_scripts)
-• 用途：在网页上检测和转换货币金额
-• 说明：content script 需要访问网页 DOM 来识别货币符号（$、€、£、¥）和金额，并在原金额旁边显示转换结果
-• 处理：所有货币检测和转换都在本地完成
-• 隐私：不收集、不上传任何网页内容或用户数据
+【为什么不能使用 activeTab】
+扩展需要在页面加载时自动运行并持续监控动态内容更新（AJAX、SPA），而非每次手动触发。用户期望打开任何网站都能自动转换货币，而不是频繁点击扩展图标。
 
-隐私承诺：扩展完全开源，代码可在 GitHub 审计。
-```
+【隐私和安全保证】
+✅ 只读取页面可见文本来检测货币符号（$、€、£、¥），不访问密码、表单、Cookie等敏感信息
+✅ 所有检测和转换都在本地完成，不上传任何网页内容或用户数据
+✅ 唯一外部请求：向 ExchangeRate-API 获取汇率数据（仅发送货币代码如"CNY"）
+✅ 完全开源：代码可在 GitHub 审计验证
 
-**英文版本：**
-```
-This extension requires two types of host permissions:
+【类似扩展】
+Google Translate、Grammarly、Dark Reader 等知名扩展都使用 <all_urls> 权限提供通用功能。
 
-【Permission 1】https://v6.exchangerate-api.com/*
-• Purpose: Fetch real-time exchange rates from ExchangeRate-API
-• Details: Only external API request for latest rates of 160+ currencies
-• Frequency: Maximum once per hour (with local caching mechanism)
-• Data: Only requests public exchange rate data, no user information sent
-
-【Permission 2】<all_urls> (content_scripts)
-• Purpose: Detect and convert currency amounts on web pages
-• Details: Content script accesses page DOM to identify currency symbols ($, €, £, ¥) and amounts, displaying converted results next to original amounts
-• Processing: All currency detection and conversion done locally
-• Privacy: No collection or upload of page content or user data
-
-Privacy Commitment: Extension is fully open source, code auditable on GitHub.
+GitHub: https://github.com/xcondor/currency-converter-extension
 ```
 
-**字符数：** 约 580 字符（中文）/ 750 字符（英文）
+**英文版本（推荐 - 更详细）：**
+```
+This extension is a universal currency converter that requires <all_urls> permission to function properly.
+
+【Why <all_urls> is Required】
+This extension automatically detects and converts currency amounts on any website users visit, including e-commerce (Amazon, eBay, Taobao), news sites (BBC, CNN), social media, and corporate websites - millions of sites worldwide. It's impossible to enumerate all websites that may contain currency information, making <all_urls> permission necessary.
+
+【Why activeTab Cannot Be Used】
+The extension must run automatically on page load and continuously monitor dynamic content updates (AJAX, SPA), not require manual trigger each time. Users expect currency conversion to work automatically on any website without frequent extension icon clicks.
+
+【Privacy and Security Guarantees】
+✅ Only reads visible page text to detect currency symbols ($, €, £, ¥), does not access passwords, forms, cookies, or sensitive data
+✅ All detection and conversion done locally, no webpage content or user data uploaded
+✅ Only external request: Fetch exchange rates from ExchangeRate-API (only sends currency code like "CNY")
+✅ Fully open source: Code auditable on GitHub
+
+【Similar Extensions】
+Google Translate, Grammarly, Dark Reader all use <all_urls> permission to provide universal functionality.
+
+GitHub: https://github.com/xcondor/currency-converter-extension
+```
+
+**字符数：** 约 950 字符（中文）/ 1000 字符（英文）
 
 ---
 
