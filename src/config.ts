@@ -12,11 +12,11 @@ export const SUPPORTED_CURRENCIES = [
 ];
 
 // 货币符号映射
+// 注意：¥ 符号同时用于 JPY 和 CNY，在 detector.ts 中根据上下文智能判断
 export const CURRENCY_SYMBOL_MAP: Record<string, string> = {
   '$': 'USD',
   '€': 'EUR',
   '£': 'GBP',
-  '¥': 'JPY',
   '￥': 'CNY',
   '₹': 'INR',
   '₽': 'RUB',

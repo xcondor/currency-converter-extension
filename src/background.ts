@@ -23,8 +23,33 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 // 点击插件图标时打开侧边栏
-chrome.action.onClicked.addListener((tab) => {
-  chrome.sidePanel.open({ windowId: tab.windowId });
+chrome.action.onClicked.addListener(async (tab) => {
+  try {
+    console.log('Action clicked, opening side panel for tab:', tab.id);
+    
+    if (!tab.windowId) {
+      console.error('No windowId available');
+      return;
+    }
+    
+    await chrome.sidePanel.open({ windowId: tab.windowId });
+    console.log('Side panel opened successfully');
+  } catch (error) {
+    console.error('Failed to open side panel:', error);
+    
+    // 尝试备用方案：使用 setOptions 然后 open
+    try {
+      await chrome.sidePanel.setOptions({
+        tabId: tab.id,
+        path: 'popup.html',
+        enabled: true
+      });
+      await chrome.sidePanel.open({ windowId: tab.windowId });
+      console.log('Side panel opened using fallback method');
+    } catch (fallbackError) {
+      console.error('Fallback method also failed:', fallbackError);
+    }
+  }
 });
 
 // 监听来自 Content Script 和 Popup 的消息

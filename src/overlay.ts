@@ -14,86 +14,50 @@ export class Overlay {
     const container = document.createElement('span');
     container.className = 'currency-converter-overlay';
     container.style.cssText = `
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-left: 8px;
-      padding: 6px 12px;
+      display: inline-block;
+      padding: 2px 6px;
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
-      border-radius: 6px;
-      font-size: 0.9em;
-      font-weight: 700;
+      border-radius: 3px;
+      font-size: 0.7em;
+      font-weight: 600;
       font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
       white-space: nowrap;
       cursor: help;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      letter-spacing: 0.5px;
+      box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s ease;
+      letter-spacing: 0.3px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       position: relative;
-      overflow: hidden;
+      vertical-align: middle;
+      margin: 0 2px;
+      line-height: 1.2;
+      opacity: 0.9;
     `;
 
     // 金额文本
     const amountText = document.createElement('span');
-    amountText.textContent = conversion.formattedResult;
+    amountText.textContent = `≈${conversion.formattedResult}`;
     amountText.style.cssText = `
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       font-variant-numeric: tabular-nums;
     `;
 
-    // 添加闪光效果
-    const shine = document.createElement('span');
-    shine.style.cssText = `
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.3) 50%,
-        transparent 70%
-      );
-      transform: translateX(-100%);
-      pointer-events: none;
-    `;
-
     container.appendChild(amountText);
-    container.appendChild(shine);
 
-    // 悬停效果 - 更有质感
+    // 悬停效果
     container.addEventListener('mouseenter', () => {
-      container.style.transform = 'scale(1.08) translateY(-2px)';
-      container.style.boxShadow = '0 4px 16px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
-      // 触发闪光动画
-      shine.style.animation = 'shine 0.6s ease';
+      container.style.opacity = '1';
+      container.style.transform = 'scale(1.1)';
+      container.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.5)';
+      container.style.zIndex = '999999';
     });
 
     container.addEventListener('mouseleave', () => {
-      container.style.transform = 'scale(1) translateY(0)';
-      container.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
-      shine.style.animation = '';
+      container.style.opacity = '0.9';
+      container.style.transform = 'scale(1)';
+      container.style.boxShadow = '0 1px 4px rgba(16, 185, 129, 0.3)';
+      container.style.zIndex = '';
     });
-
-    // 添加闪光动画样式
-    if (!document.getElementById('currency-converter-shine-animation')) {
-      const style = document.createElement('style');
-      style.id = 'currency-converter-shine-animation';
-      style.textContent = `
-        @keyframes shine {
-          0% {
-            transform: translateX(-100%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `;
-      document.head.appendChild(style);
-    }
 
     // 设置提示信息
     if (showRate) {
@@ -114,12 +78,6 @@ export class Overlay {
   removeAll() {
     const overlays = document.querySelectorAll('.currency-converter-overlay');
     overlays.forEach(overlay => overlay.remove());
-    
-    // 清理动画样式
-    const shineStyle = document.getElementById('currency-converter-shine-animation');
-    if (shineStyle) {
-      shineStyle.remove();
-    }
   }
 }
 

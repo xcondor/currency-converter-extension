@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "实时汇率转换器",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "自动识别网页中的货币金额并转换为本地货币",
   "permissions": [
     "storage",
