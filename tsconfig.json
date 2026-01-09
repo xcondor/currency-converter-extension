@@ -3,7 +3,7 @@
     "target": "ES2020",
     "module": "ES2020",
     "lib": ["ES2020", "DOM"],
-    "outDir": "./dist",
+    "outDir": "currency-converter",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
@@ -14,5 +14,5 @@
     "types": ["chrome", "jest", "node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "exclude": ["node_modules", "currency-converter", "tests"]
 }
