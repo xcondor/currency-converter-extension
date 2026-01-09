@@ -14,7 +14,7 @@ let isLoading = false;
 let isInitialized = false;
 
 // 全局已处理元素集合（跨多次扫描）
-const globalProcessedElements = new WeakSet<Element>();
+let globalProcessedElements = new Set<Element>(); // 改用 Set 以便清空
 const globalProcessedPrices = new Map<string, {element: Element, overlay: HTMLElement}>();
 
 // 初始化
@@ -158,7 +158,10 @@ function fullRescan() {
   overlay.removeAll();
   
   // 清空全局已处理元素集合
+  globalProcessedElements.clear();
   globalProcessedPrices.clear();
+  
+  console.log('Cleared all processed records, starting fresh scan...');
   
   // 执行扫描
   scanAndConvert();
@@ -1058,7 +1061,7 @@ function showNotification(message: string, type: 'success' | 'error' = 'success'
 }
 
 // 监听设置变化
-chrome.storage.onChanged.addListener((changes, area) => {
+chrome.storage.onChanged.addListener(async (changes, area) => {
   if (area === 'local' && changes.settings) {
     const newSettings = changes.settings.newValue;
     const oldSettings = changes.settings.oldValue || {};
@@ -1082,8 +1085,37 @@ chrome.storage.onChanged.addListener((changes, area) => {
     else if (!oldSettings.enabled || 
              oldSettings.baseCurrency !== newSettings.baseCurrency ||
              oldSettings.decimalPlaces !== newSettings.decimalPlaces) {
-      // 完全重新扫描
-      fullRescan();
+      
+      // 如果本地货币改变了，需要先获取新的汇率
+      if (oldSettings.baseCurrency !== newSettings.baseCurrency) {
+        console.log(`Base currency changed: ${oldSettings.baseCurrency} → ${newSettings.baseCurrency}`);
+        console.log('Fetching new exchange rates...');
+        
+        try {
+          // 获取新的汇率
+          const response = await chrome.runtime.sendMessage({
+            type: 'GET_RATES',
+            payload: { baseCurrency: newSettings.baseCurrency }
+          });
+          
+          if (response && response.rates) {
+            currentRates = response.rates;
+            console.log('New rates loaded:', Object.keys(currentRates).length, 'currencies');
+            
+            // 完全重新扫描
+            fullRescan();
+          } else {
+            console.error('Failed to get new rates');
+            showNotification(i18n.t('fetchRatesFailed'), 'error');
+          }
+        } catch (error) {
+          console.error('Failed to fetch new rates:', error);
+          showNotification(i18n.t('fetchRatesFailed'), 'error');
+        }
+      } else {
+        // 只是精度改变或从禁用变为启用，直接重新扫描
+        fullRescan();
+      }
     }
   }
 });
