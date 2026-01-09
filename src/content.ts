@@ -938,28 +938,127 @@ function insertOverlayAfterElement(element: Element, result: any): HTMLElement |
       opacity: 0.95;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
       transition: all 0.2s ease;
-      cursor: default;
+      cursor: help;
+      position: relative;
     `;
     
     overlayElement.textContent = `≈ ${result.formattedResult}`;
+    
+    // 创建 tooltip 显示汇率信息（添加到 body 以避免被 overflow:hidden 裁剪）
+    const tooltip = document.createElement('div');
+    tooltip.className = 'currency-converter-tooltip';
+    tooltip.style.cssText = `
+      position: fixed;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 2147483647;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: none;
+    `;
+    
+    // 格式化汇率显示
+    const rateText = result.rate >= 1 
+      ? `1 ${result.originalCurrency} = ${result.rate.toFixed(4)} ${result.targetCurrency}`
+      : `1 ${result.targetCurrency} = ${(1 / result.rate).toFixed(4)} ${result.originalCurrency}`;
+    
+    tooltip.textContent = rateText;
+    document.body.appendChild(tooltip); // 添加到 body 而不是覆盖层内部
+    
+    // 更新 tooltip 位置的函数
+    const updateTooltipPosition = () => {
+      const rect = overlayElement.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+      
+      // 计算位置：在覆盖层上方居中
+      let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+      let top = rect.top - tooltipRect.height - 8;
+      
+      // 防止 tooltip 超出屏幕左侧
+      if (left < 10) {
+        left = 10;
+      }
+      
+      // 防止 tooltip 超出屏幕右侧
+      if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+      }
+      
+      // 防止 tooltip 超出屏幕顶部（显示在下方）
+      if (top < 10) {
+        top = rect.bottom + 8;
+      }
+      
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    };
     
     // 添加悬停效果
     overlayElement.addEventListener('mouseenter', () => {
       overlayElement.style.opacity = '1';
       overlayElement.style.transform = 'translateY(-1px)';
       overlayElement.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1)';
+      
+      // 显示 tooltip
+      tooltip.style.display = 'block';
+      updateTooltipPosition();
+      // 使用 requestAnimationFrame 确保位置计算完成后再显示
+      requestAnimationFrame(() => {
+        tooltip.style.opacity = '1';
+      });
     });
     
     overlayElement.addEventListener('mouseleave', () => {
       overlayElement.style.opacity = '0.95';
       overlayElement.style.transform = 'translateY(0)';
       overlayElement.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08)';
+      
+      // 隐藏 tooltip
+      tooltip.style.opacity = '0';
+      setTimeout(() => {
+        tooltip.style.display = 'none';
+      }, 200); // 等待淡出动画完成
     });
+    
+    // 监听滚动和窗口大小变化，更新 tooltip 位置
+    const updatePositionOnScroll = () => {
+      if (tooltip.style.opacity === '1') {
+        updateTooltipPosition();
+      }
+    };
+    
+    window.addEventListener('scroll', updatePositionOnScroll, { passive: true });
+    window.addEventListener('resize', updatePositionOnScroll, { passive: true });
+    
+    // 清理函数：当覆盖层被移除时，也移除 tooltip
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.removedNodes.forEach((node) => {
+          if (node === overlayElement) {
+            tooltip.remove();
+            window.removeEventListener('scroll', updatePositionOnScroll);
+            window.removeEventListener('resize', updatePositionOnScroll);
+            observer.disconnect();
+          }
+        });
+      });
+    });
+    
+    if (overlayElement.parentElement) {
+      observer.observe(overlayElement.parentElement, { childList: true });
+    }
 
     // 获取父元素
     const parent = element.parentElement;
     if (!parent) {
       console.warn('Element has no parent, cannot insert overlay');
+      tooltip.remove();
       return null;
     }
 
